@@ -1,0 +1,331 @@
+* {
+  margin: 0;
+  padding: 0;            /* resets default margin and padding for all elements*/
+  box-sizing: border-box;
+}
+
+:root {
+  --blush-pink: #ffc5d9;
+  --baby-blue: #b4d4ff;
+  --mint-green: #d0f4de;      /* defining color variables for consistent use */
+  --lavender: #e7c6ff;
+  --cream: #fff8e8;
+  --soft-white: #fefefe;
+  --text-dark: #4a4a4a;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+body { /* applies soft pastel background and sets font styles */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--soft-white) 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.navbar {
+  background: var(--soft-white);
+  box-shadow: 0 2px 12px var(--shadow);
+  padding: 1.2rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-size: 1.6rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-btn { /* styles for buttons pink border  */
+  background: transparent;
+  border: 2px solid var(--blush-pink);
+  color: var(--text-dark);
+  padding: 0.6rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover { /* hover effect for buttons that is slight lift effect */
+  background: var(--blush-pink);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 197, 217, 0.4);
+}
+
+.nav-btn.active {
+  background: var(--blush-pink);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.page {
+  display: none;
+}
+
+.page.active { /* hides all the pages except the active one */
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn { /* fade in animation for page transitions */
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--text-dark);
+}
+
+.posts-grid { /* grid layout for posts */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.post-card { /* styles for individual post cards slight round edges */
+  background: var(--soft-white);
+  border-radius: 20px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px var(--shadow);
+  border: 3px solid transparent;
+}
+
+.post-card:nth-child(4n + 1) { /* different border colors for cards in a cycle of 4 */
+  border-color: var(--blush-pink);
+}
+
+.post-card:nth-child(4n + 2) {
+  border-color: var(--baby-blue);
+}
+
+.post-card:nth-child(4n + 3) {
+  border-color: var(--mint-green);
+}
+
+.post-card:nth-child(4n + 4) {
+  border-color: var(--lavender);
+}
+
+.post-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.post-card:nth-child(4n + 1):hover {
+  box-shadow: 0 12px 24px rgba(255, 197, 217, 0.5);
+}
+
+.post-card:nth-child(4n + 2):hover {
+  box-shadow: 0 12px 24px rgba(180, 212, 255, 0.5);
+}
+
+.post-card:nth-child(4n + 3):hover {
+  box-shadow: 0 12px 24px rgba(208, 244, 222, 0.5);
+}
+
+.post-card:nth-child(4n + 4):hover {
+  box-shadow: 0 12px 24px rgba(231, 198, 255, 0.5);
+}
+
+.post-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-dark);
+}
+
+.post-card p {
+  color: #666;
+  line-height: 1.6;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.post-date {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 1rem;
+  display: block;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.2rem;
+  color: #999;
+}
+
+.post-form { /* styles for the new post in the center */
+  max-width: 700px;
+  margin: 0 auto;
+  background: var(--soft-white);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 8px 24px var(--shadow);
+  border: 3px solid var(--lavender);
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--baby-blue);
+  border-radius: 15px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: var(--cream);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--lavender);
+  box-shadow: 0 0 0 4px rgba(231, 198, 255, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 200px;
+}
+
+.btn-submit { /* submit button with gradient background */
+  width: 100%;
+  background: linear-gradient(135deg, var(--blush-pink), var(--lavender));
+  color: var(--text-dark);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 197, 217, 0.4);
+}
+
+.btn-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 197, 217, 0.6);
+}
+
+.btn-back {
+  background: var(--mint-green);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.btn-back:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 4px 12px rgba(208, 244, 222, 0.5);
+}
+
+.single-post {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--soft-white);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 8px 24px var(--shadow);
+  border: 3px solid var(--baby-blue);
+}
+
+.single-post h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.single-post .post-date {
+  display: block;
+  margin-bottom: 2rem;
+  color: #999;
+  font-size: 0.95rem;
+}
+
+.single-post .post-body {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .post-form {
+    padding: 2rem;
+  }
+
+  .single-post {
+    padding: 2rem;
+  }
+
+  .single-post h2 {
+    font-size: 2rem;
+  }
+}
