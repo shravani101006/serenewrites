@@ -1,13 +1,13 @@
 * {
   margin: 0;
-  padding: 0;            /* resets default margin and padding for all elements*/
+  padding: 0;
   box-sizing: border-box;
 }
 
 :root {
   --blush-pink: #ffc5d9;
   --baby-blue: #b4d4ff;
-  --mint-green: #d0f4de;      /* defining color variables for consistent use */
+  --mint-green: #d0f4de;
   --lavender: #e7c6ff;
   --cream: #fff8e8;
   --soft-white: #fefefe;
@@ -15,7 +15,7 @@
   --shadow: rgba(0, 0, 0, 0.08);
 }
 
-body { /* applies soft pastel background and sets font styles */
+body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, var(--cream) 0%, var(--soft-white) 100%);
   color: var(--text-dark);
@@ -52,7 +52,7 @@ body { /* applies soft pastel background and sets font styles */
   gap: 1rem;
 }
 
-.nav-btn { /* styles for buttons pink border  */
+.nav-btn {
   background: transparent;
   border: 2px solid var(--blush-pink);
   color: var(--text-dark);
@@ -64,7 +64,7 @@ body { /* applies soft pastel background and sets font styles */
   transition: all 0.3s ease;
 }
 
-.nav-btn:hover { /* hover effect for buttons that is slight lift effect */
+.nav-btn:hover {
   background: var(--blush-pink);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 197, 217, 0.4);
@@ -84,12 +84,12 @@ body { /* applies soft pastel background and sets font styles */
   display: none;
 }
 
-.page.active { /* hides all the pages except the active one */
+.page.active {
   display: block;
   animation: fadeIn 0.4s ease;
 }
 
-@keyframes fadeIn { /* fade in animation for page transitions */
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -107,14 +107,14 @@ body { /* applies soft pastel background and sets font styles */
   color: var(--text-dark);
 }
 
-.posts-grid { /* grid layout for posts */
+.posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
 
-.post-card { /* styles for individual post cards slight round edges */
+.post-card {
   background: var(--soft-white);
   border-radius: 20px;
   padding: 2rem;
@@ -124,7 +124,7 @@ body { /* applies soft pastel background and sets font styles */
   border: 3px solid transparent;
 }
 
-.post-card:nth-child(4n + 1) { /* different border colors for cards in a cycle of 4 */
+.post-card:nth-child(4n + 1) {
   border-color: var(--blush-pink);
 }
 
@@ -190,7 +190,7 @@ body { /* applies soft pastel background and sets font styles */
   color: #999;
 }
 
-.post-form { /* styles for the new post in the center */
+.post-form {
   max-width: 700px;
   margin: 0 auto;
   background: var(--soft-white);
@@ -236,7 +236,7 @@ body { /* applies soft pastel background and sets font styles */
   min-height: 200px;
 }
 
-.btn-submit { /* submit button with gradient background */
+.btn-submit {
   width: 100%;
   background: linear-gradient(135deg, var(--blush-pink), var(--lavender));
   color: var(--text-dark);
@@ -328,4 +328,41 @@ body { /* applies soft pastel background and sets font styles */
   .single-post h2 {
     font-size: 2rem;
   }
+}
+.auth-page {
+  display: none;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.auth-page.active {
+  display: block;
+}
+
+.auth-box {
+  max-width: 350px;
+  margin: 100px auto;
+  background: var(--soft-white);
+  padding: 30px 25px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 12px;
+  border: 2px solid var(--baby-blue);
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: linear-gradient(135deg, var(--blush-pink), var(--lavender));
+  border-radius: 20px;
+  margin-top: 15px;
+  font-size: 1rem;
+  cursor: pointer;
 }
