@@ -1,82 +1,106 @@
-// ===============================
-// CONFIG
-// ===============================
-const API_BASE = "http://localhost:5000/api";  // backend URL
-let authToken = localStorage.getItem("token") || "";
-let posts = [];
+/* ---------- PAGE SWITCHER ---------- */
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 
-
-// ===============================
-// PAGE ELEMENTS
-// ===============================
-const pages = {
-  home: document.getElementById("home-page"),
-  newPost: document.getElementById("new-post-page"),
-  singlePost: document.getElementById("single-post-page"),
-};
-
-const navButtons = document.querySelectorAll(".nav-btn");
-const postForm = document.getElementById("post-form");
-const postsContainer = document.getElementById("posts-container");
-const emptyState = document.getElementById("empty-state");
-const backBtn = document.getElementById("back-btn");
-const singlePostContent = document.getElementById("single-post-content");
-
-
-// ===============================
-// INITIALIZATION
-// ===============================
-
-function init() {
-  loadPostsFromBackend();
-  attachEventListeners();
+  // hide navbar on login/signup
+  if (id === "login-page" || id === "signup-page") {
+    document.getElementById("navbar").style.display = "none";
+  } else {
+    document.getElementById("navbar").style.display = "block";
+  }
 }
 
-async function loadPostsFromBackend() {
-  const res = await fetch(`${API_BASE}/posts`);
-  posts = await res.json();
+/* ---------- NAVIGATION BUTTONS ---------- */
+const navButtons = document.querySelectorAll(".nav-btn");
+
+navButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.dataset.page;
+
+    // highlight button
+    navButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // open correct page
+    showPage(target);
+  });
+});
+
+/* ---------- AUTH ---------- */
+function signup() {
+  const u = document.getElementById("signup-user").value;
+  const p = document.getElementById("signup-pass").value;
+
+  if (!u || !p) return alert("Fill everything");
+
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+  if (users.some(x => x.user === u)) return alert("Username already exists!");
+
+  users.push({ user: u, pass: p });
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Account created!");
+  showPage("login-page");
+}
+
+function login() {
+  const u = document.getElementById("login-user").value;
+  const p = document.getElementById("login-pass").value;
+
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+  if (!users.some(x => x.user === u && x.pass === p))
+    return alert("Wrong username or password!");
+
+  localStorage.setItem("currentUser", u);
+
+  showPage("home-page");
   renderPosts();
 }
 
+function logout() {
+  localStorage.removeItem("currentUser");
+  showPage("login-page");
+}
 
-// ===============================
-// EVENT LISTENERS
-// ===============================
+/* ---------- POSTS STORAGE ---------- */
+let posts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-function attachEventListeners() {
-  navButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      navigateTo(btn.dataset.page);
-      updateActiveNavButton(btn);
-    });
+function savePosts() {
+  localStorage.setItem("posts", JSON.stringify(posts));
+}
+
+/* ---------- RENDER ALL POSTS ---------- */
+function renderPosts() {
+  const container = document.getElementById("posts-container");
+  const empty = document.getElementById("empty-state");
+
+  container.innerHTML = "";
+
+  if (posts.length === 0) {
+    empty.style.display = "block";
+    return;
+  }
+
+  empty.style.display = "none";
+
+  posts.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "post-card";
+    card.innerHTML = `
+      <h3>${post.title}</h3>
+      <p>${post.content}</p>
+      <span class="post-date">${post.date}</span>
+    `;
+    card.onclick = () => openPost(post.id);
+    container.appendChild(card);
   });
-
-  postForm.addEventListener("submit", handleFormSubmit);
-
-  backBtn.addEventListener("click", () => navigateTo("home"));
 }
 
-
-// ===============================
-// NAVIGATION
-// ===============================
-
-function navigateTo(pageName) {
-  Object.values(pages).forEach((page) => page.classList.remove("active"));
-  pages[pageName].classList.add("active");
-}
-
-function updateActiveNavButton(activeBtn) {
-  navButtons.forEach((btn) => btn.classList.remove("active"));
-  activeBtn.classList.add("active");
-}
-
-
-// ===============================
-// POST CREATION
-// ===============================
-
-async function handleFormSubmit(e) {
+/* ---------- CREATE POST ---------- */
+document.getElementById("post-form").addEventListener("submit", e => {
   e.preventDefault();
 
   const title = document.getElementById("post-title").value.trim();
@@ -84,159 +108,33 @@ async function handleFormSubmit(e) {
 
   if (!title || !content) return;
 
-  if (!authToken) {
-    alert("You must be logged in to create a post!");
-    return;
-  }
-
-  const newPost = { title, content };
-
-  await fetch(`${API_BASE}/posts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authToken,
-    },
-    body: JSON.stringify(newPost),
+  posts.unshift({
+    id: Date.now(),
+    title,
+    content,
+    date: new Date().toLocaleDateString()
   });
 
-  postForm.reset();
-  navigateTo("home");
-  updateActiveNavButton(document.querySelector('[data-page="home"]'));
-  loadPostsFromBackend();
-}
+  savePosts();
+  renderPosts();
 
+  // go to home page
+  showPage("home-page");
 
-// ===============================
-// RENDER POSTS
-// ===============================
+  // highlight home btn
+  document.querySelector('[data-page="home-page"]').classList.add("active");
+});
 
-function renderPosts() {
-  postsContainer.innerHTML = "";
+/* ---------- OPEN SINGLE POST ---------- */
+function openPost(id) {
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
 
-  if (posts.length === 0) {
-    emptyState.style.display = "block";
-    return;
-  }
-
-  emptyState.style.display = "none";
-
-  posts.forEach((post) => {
-    const card = createPostCard(post);
-    postsContainer.appendChild(card);
-  });
-}
-
-function createPostCard(post) {
-  const card = document.createElement("div");
-  card.className = "post-card";
-
-  card.innerHTML = `
-    <h3>${escapeHtml(post.title)}</h3>
-    <p>${escapeHtml(post.content)}</p>
+  document.getElementById("single-post-content").innerHTML = `
+    <h2>${post.title}</h2>
     <span class="post-date">${post.date}</span>
+    <div class="post-body">${post.content}</div>
   `;
 
-  card.addEventListener("click", () => showSinglePost(post._id));
-  return card;
+  showPage("single-post-page");
 }
-
-
-// ===============================
-// SINGLE POST VIEW
-// ===============================
-
-async function showSinglePost(id) {
-  const res = await fetch(`${API_BASE}/posts/${id}`);
-  const post = await res.json();
-
-  singlePostContent.innerHTML = `
-    <h2>${escapeHtml(post.title)}</h2>
-    <span class="post-date">${post.date}</span>
-    <div class="post-body">${escapeHtml(post.content)}</div>
-  `;
-
-  if (authToken) {
-    let deleteBtn = document.createElement("button");
-    deleteBtn.className = "btn-submit";
-    deleteBtn.style.background = "#ff6b6b";
-    deleteBtn.style.marginTop = "20px";
-    deleteBtn.innerText = "🗑 Delete Post";
-
-    deleteBtn.onclick = () => deletePost(id);
-
-    singlePostContent.appendChild(deleteBtn);
-  }
-
-  navigateTo("single-post");
-}
-
-
-// ===============================
-// DELETE POST
-// ===============================
-
-async function deletePost(id) {
-  if (!confirm("Are you sure you want to delete this post?")) return;
-
-  await fetch(`${API_BASE}/posts/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: authToken },
-  });
-
-  alert("Post deleted!");
-
-  navigateTo("home");
-  loadPostsFromBackend();
-}
-
-
-// ===============================
-// AUTH FUNCTIONS (REGISTER + LOGIN)
-// ===============================
-
-async function register(username, password) {
-  const res = await fetch(`${API_BASE}/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
-
-  const data = await res.json();
-  alert(data.message);
-}
-
-async function login(username, password) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
-
-  const data = await res.json();
-
-  if (data.token) {
-    authToken = data.token;
-    localStorage.setItem("token", authToken);
-    alert("Login successful!");
-  } else {
-    alert(data.error);
-  }
-}
-
-
-// ===============================
-// UTIL
-// ===============================
-
-function escapeHtml(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-
-// ===============================
-// START APP
-// ===============================
-init();
