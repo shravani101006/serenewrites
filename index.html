@@ -1,70 +1,86 @@
-<!doctype html> <!-- declares html document -->
-<html lang="en"> <!-- language is english-->
-  <head> <!-- head section contains info about the webpage -->
-    <meta charset="UTF-8" /> <!-- allows you to use all the characters-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Serene Writes</title> <!-- title-->
-    <link rel="stylesheet" href="style.css" /> <!-- links the css file that is the design file-->
-  </head>
-  <body> <!-- whatever that is visible to the user-->
-    <nav class="navbar">
-      <div class="nav-container"> <!-- centres and organizes things-->
-        <h1 class="nav-logo">✨ Serene Writes</h1>
-        <div class="nav-links">
-          <button class="nav-btn active" data-page="home">Home</button> <!-- The data-page attribute tells JavaScript which page to open-->
-          <button class="nav-btn" data-page="new-post">New Post</button> 
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ Serene Write</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<section id="login-page" class="page active auth-box">
+  <h2>Login ✨</h2>
+  <input id="login-user" placeholder="Username">
+  <input id="login-pass" type="password" placeholder="Password">
+  <button class="btn-submit" onclick="login()">Login</button>
+
+  <p style="margin-top:10px;">No account?  
+    <a href="#" onclick="showPage('signup-page')">Sign Up</a>
+  </p>
+</section>
+
+<!-- SIGNUP PAGE -->
+<section id="signup-page" class="page auth-box">
+  <h2>Create Account 💗</h2>
+  <input id="signup-user" placeholder="Choose username">
+  <input id="signup-pass" type="password" placeholder="Choose password">
+  <button class="btn-submit" onclick="signup()">Sign Up</button>
+
+  <p style="margin-top:10px;">Already a user?  
+    <a href="#" onclick="showPage('login-page')">Login</a>
+  </p>
+</section>
+
+<!-- MAIN APP -->
+<nav class="navbar page" id="navbar">
+  <div class="nav-container">
+    <h1 class="nav-logo">✨ SereneWrite</h1>
+    <div class="nav-links">
+      <button class="nav-btn active" data-page="home-page">Home</button>
+      <button class="nav-btn" data-page="new-post-page">New Post</button>
+      <button class="nav-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- HOME PAGE -->
+  <section id="home-page" class="page">
+    <h2 class="page-title">All Posts</h2>
+    <div id="posts-container" class="posts-grid"></div>
+    <div id="empty-state" class="empty-state">No posts yet. Create your first post! ✨</div>
+  </section>
+
+  <!-- NEW POST PAGE -->
+  <section id="new-post-page" class="page">
+    <h2 class="page-title">Create New Post</h2>
+
+    <form id="post-form" class="post-form">
+      <div class="form-group">
+        <label>Title</label>
+        <input id="post-title" placeholder="Enter your post title..." required>
       </div>
-    </nav>
 
-    <main class="container"> <!-- holds all the main content of the site-->
-      <!-- Home Page -->
-      <section id="home-page" class="page active">
-        <h2 class="page-title">All Posts</h2>
-        <div id="posts-container" class="posts-grid">
-          <!-- Posts will be dynamically(js) inserted here -->
-        </div>
-        <div id="empty-state" class="empty-state">
-          <p>No posts yet. Create your first post! ✨</p> <!-- message when no posts are there-->
-        </div>
-      </section>
+      <div class="form-group">
+        <label>Content</label>
+        <textarea id="post-content" placeholder="Write your post content..." required></textarea>
+      </div>
 
-      <!-- New Post Page -->
-      <section id="new-post-page" class="page"> <!--hidden by default-->
-        <h2 class="page-title">Create New Post</h2>
-        <form id="post-form" class="post-form">
-          <div class="form-group">
-            <label for="post-title">Title</label>
-            <input
-              type="text"
-              id="post-title"
-              placeholder="Enter your post title..."
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="post-content">Content</label>
-            <textarea
-              id="post-content"
-              rows="10"
-              placeholder="Write your post content here..."
-              required
-            ></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Publish Post ✨</button> <!-- button to submit (js handles evrything)-->
-        </form>
-      </section>
+      <button class="btn-submit" type="submit">Publish Post ✨</button>
+    </form>
+  </section>
 
-      <!-- Single Post View -->
-      <section id="single-post-page" class="page">
-        <button class="btn-back" id="back-btn">← Back to Home</button>
-        <article id="single-post-content" class="single-post">
-          <!-- Single post content will be inserted here -->
-        </article>
-      </section>
-    </main>
+  <!-- SINGLE POST PAGE -->
+  <section id="single-post-page" class="page">
+    <button class="btn-back" onclick="showPage('home-page')">← Back to Home</button>
+    <article id="single-post-content" class="single-post"></article>
+  </section>
 
-    <script src="script.js"></script> <!-- links the js file that handles all the functionality-->
-  </body>
+</main>
 
+<script src="script.js"></script>
+</body>
 </html>
